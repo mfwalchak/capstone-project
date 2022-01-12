@@ -1,5 +1,3 @@
 # Capstone: Restaurant Reservation System Backend
 
-This starter code for the backend of the capstone project in the Thinkful curriculum.
-
-See [../README.md](../README.md) for detailed instructions.
+The backend project runs on localhost:5000 by default

@@ -1,3 +1,4 @@
+//this file defines the Express application and connects routers
 const path = require("path");
 
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });

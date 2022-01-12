@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import Layout from "./layout/Layout";
 
 /**
- * Defines the root application component.
+ * Defines the root application component. Do not make changes to this file.
  * @returns {JSX.Element}
  */
 function App() {
