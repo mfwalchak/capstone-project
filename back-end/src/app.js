@@ -17,14 +17,6 @@ app.use(express.json());
 
 app.use("/reservations", reservationsRouter);
 
-//==========================use this to merge front and back end, need a build folder===================//
-// Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, '../../front-end/build')))
-// AFTER defining routes: Anything that doesn't match what's above, send back index.html; (the beginning slash ('/') in the string is important!)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + "../../front-end/build/index.html"));
-})
-
 
 app.use(notFound);
 app.use(errorHandler);

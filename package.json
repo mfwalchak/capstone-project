@@ -8,10 +8,6 @@
     "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
   "scripts": {
-    "frontend": "cd front-end && npm start",
-    "backend": "cd back-end && nodemon app.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run backend\" \"npm run frontend\"",
-    "heroku-postbuild": "cd front-end && npm install && npm run build",
     "build": "npm -prefix front-end run build",
     "preinstall": "cd ./back-end && npm install",
     "install": "cd ./front-end && npm install",
