@@ -41,17 +41,17 @@ describe("US-01 - Create and list reservations - E2E", () => {
       await page.type("input[name=reservation_date]", "01012035");
       await page.type("input[name=reservation_time]", "1330");
       await page.type("input[name=people]", "2");
-
+      
       await page.screenshot({
         path: ".screenshots/us-01-submit-before.png",
         fullPage: true,
       });
-
+      console.log("beforeSubmit")
       await Promise.all([
         page.click("[type=submit]"),
         page.waitForNavigation({ waitUntil: "networkidle0" }),
       ]);
-
+      console.log("afterSubmit")
       await page.screenshot({
         path: ".screenshots/us-01-submit-after.png",
         fullPage: true,

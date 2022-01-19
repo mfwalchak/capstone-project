@@ -6,6 +6,9 @@ import NewReservation from "../reservations/NewReservation";
 import NewTable from "../tables/NewTable";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
+import useQuery from "../utils/useQuery";
+//import { useParams } from "react-router-dom";
+
 
 /**
  * Defines all the routes for the application.
@@ -15,6 +18,8 @@ import { today } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Routes() {
+  const query = useQuery();
+  const date = query.get("date"); 
   return (
     <Switch>
       <Route exact={true} path="/">
@@ -23,10 +28,14 @@ function Routes() {
       <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
       </Route>
-      <Route path="/dashboard">
+      <Route exact={true} path="/dashboard">
         <Dashboard date={today()} />
+        {/* may eventually need this logic for back and forth buttons {date || today()} */}
       </Route>
-      <Route exact={true} path="/reservations/new">
+      {/* <Route path="/dashboard/:date">
+        <Dashboard date={date} />
+      </Route> */}
+      <Route path="/reservations/new">
         <NewReservation />
       </Route>
       <Route exact={true} path="/tables/new">

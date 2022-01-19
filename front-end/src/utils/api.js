@@ -69,7 +69,7 @@ export async function listReservations(params, signal) {
 }
 
 export async function createReservation(params, signal) {
-  const url = `${API_BASE_URL}/reservations/new`;
+  const url = `${API_BASE_URL}/reservations`; //this file path might potentially cause backend tests to fail check /reservations
   const options = {
     method: "POST",
     headers,

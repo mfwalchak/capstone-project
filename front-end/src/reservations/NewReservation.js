@@ -23,19 +23,24 @@ function ReservationForm() {
   
     function handleChange(evt) {
         const value = evt.target.value;
+        console.log("handleChange:", value);
         setReservation({...reservation, [evt.target.name]: value});
     }
+    function handleNumberChange(evt) {
+      const value = evt.target.value;
+      setReservation({...reservation, [evt.target.name]: Number(value)});
+  }
   
     function handleSubmit(evt) {
-      console.log(reservationObject);
-      alert(`A new reservation was submitted for ` + reservation.last_name + `, people of ` + reservation.people);
+      //console.log(reservationObject);
+      //alert(`A new reservation was submitted for ` + reservation.last_name + `, people of ` + reservation.people);
       evt.preventDefault();
       // async function reservationMaker() {
       //   const newReso = await createReservation(reservationObject)
       // }
       createReservation(reservationObject)
         .then(() =>{
-          history.push("/")
+          history.push(`/dashboard?date=${reservation.reservation_date}`)
         })
         .catch(setError);
     }
@@ -45,7 +50,7 @@ function ReservationForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form>
             <label>
               First Name:
               <input type="text" name="first_name" value={reservation.first_name} onChange={handleChange} />
@@ -60,19 +65,19 @@ function ReservationForm() {
             </label>
             <label>
               Date:
-              <input type="text" name="reservation_date" value={reservation.reservation_date} onChange={handleChange} />
+              <input type="date" name="reservation_date" value={reservation.reservation_date} onChange={handleChange} />
             </label>
             <label>
               Time:
-              <input type="text" name="reservation_time" value={reservation.reservation_time} onChange={handleChange} />
+              <input type="time" name="reservation_time" value={reservation.reservation_time} onChange={handleChange} />
             </label>
             <label>
               Party Size:
-              <input type="text" name="people" value={reservation.people} onChange={handleChange} />
+              <input type="text" id="people" name="people" value={reservation.people} onChange={handleNumberChange} />
             </label>
             <ErrorAlert error={error} />
-            <button type="submit" className="btn btn-primary" value="Submit" onClick={handleSubmit}>Submit</button>
-            <button type="cancel" className="btn btn-primary" value="Cancel" onClick={handleCancel}>Cancel</button>
+            <button type="submit" className="btn btn-primary" value="submit" onClick={handleSubmit}>Submit</button>
+            <button type="cancel" className="btn btn-primary" value="cancel" onClick={handleCancel}>Cancel</button>
 
         </form>
     )
