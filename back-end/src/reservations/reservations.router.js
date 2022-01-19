@@ -7,8 +7,7 @@
 const router = require("express").Router();
 const controller = require("./reservations.controller");
 
-router.route("/").get(controller.list);
-router.route("/new").post(controller.post);
+router.route("/").get(controller.list).post(controller.post); //this will fail tests need everything routed off /
 
 
 
