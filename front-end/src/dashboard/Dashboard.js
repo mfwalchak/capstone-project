@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
+import { today, previous, next } from "../utils/date-time";
 //import { useParams } from "react-router-dom";
 /**
  * Defines the dashboard page.
@@ -16,7 +17,7 @@ function Dashboard({ date }) {
   const [newDate, setNewDate] = useState(query.get("date") || date)
   //const [dateParams, setDateParams] = useParams();
   //console.log("********useQuery*********", query.get("date"));
-  console.log("********useParams*********", query.get("date"));
+  //console.log("********useParams*********", query.get("date"));
   
   //setNewDate = query.get("date")
   
@@ -34,11 +35,31 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+ function dateHandler(evt) {
+  evt.preventDefault();
+  console.log(evt.target.id)
+  if (evt.target.id === "today"){
+    setNewDate(today);
+  }
+  if (evt.target.id === "prev"){
+    setNewDate(previous);
+  }
+  if (evt.target.id === "next"){
+    setNewDate(next);
+  }
+}
+
+
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {newDate}</h4>
+      </div>
+      <div>
+        <button id="prev" onClick={dateHandler}>Prev</button>
+        <button id="today" onClick={dateHandler}>Today</button>
+        <button id="next" onClick={dateHandler}>Next</button>
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
