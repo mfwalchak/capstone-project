@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 //import ReservationCreate from "./ReservationCreate";
 import { createReservation } from "../utils/api";
-
+import { today } from "../utils/date-time.js";
 
 function ReservationForm() {
     const history = useHistory();
@@ -35,9 +35,8 @@ function ReservationForm() {
       //console.log(reservationObject);
       //alert(`A new reservation was submitted for ` + reservation.last_name + `, people of ` + reservation.people);
       evt.preventDefault();
-      // async function reservationMaker() {
-      //   const newReso = await createReservation(reservationObject)
-      // }
+      const day = new Date(`${reservation.reservation_date} ${reservation.reservation_time}`)
+
       createReservation(reservationObject)
         .then(() =>{
           history.push(`/dashboard?date=${reservation.reservation_date}`)

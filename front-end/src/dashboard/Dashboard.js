@@ -61,7 +61,7 @@ function Dashboard({ date }) {
         <button id="today" onClick={dateHandler}>Today</button>
         <button id="next" onClick={dateHandler}>Next</button>
       </div>
-      <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={reservationsError} date={newDate} />
       {JSON.stringify(reservations)}
     </main>
   );
