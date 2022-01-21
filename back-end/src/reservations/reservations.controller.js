@@ -75,7 +75,7 @@ function reservationIsDuringBusinessHours(req, res, next){
   try{
     if (time < "10:30" || time > "21:30"){
       const error = new Error(`${time}`);
-      error.message="I'm going to have to change this anyway";
+      error.message="Reservation must be during business hours";
       error.status = 400;
       throw error;
     } next();
@@ -93,7 +93,7 @@ function reservationIsEarlierToday(req, res, next) {
   try{
     if (time < `${now.getHours()}:${now.getMinutes()}`){
       const error = new Error(`${time}`);
-      error.message="Too Soon!";
+      error.message="Reservation must be for a time in the future";
       error.status = 400;
       throw error;
     } next();
