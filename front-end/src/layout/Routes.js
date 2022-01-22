@@ -30,11 +30,7 @@ function Routes() {
       </Route>
       <Route exact={true} path="/dashboard">
         <Dashboard date={today()} />
-        {/* may eventually need this logic for back and forth buttons {date || today()} */}
       </Route>
-      {/* <Route path="/dashboard/:date">
-        <Dashboard date={date} />
-      </Route> */}
       <Route path="/reservations/new">
         <NewReservation />
       </Route>

@@ -6,6 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 import { today } from "../utils/date-time.js";
 
+
 function ReservationForm() {
     const history = useHistory();
     const [reservation, setReservation] = useState({
@@ -49,6 +50,7 @@ function ReservationForm() {
     }
 
     return (
+      <div>
         <form>
             <label>
               First Name:
@@ -77,8 +79,8 @@ function ReservationForm() {
             <ErrorAlert error={error} />
             <button type="submit" className="btn btn-primary" value="submit" onClick={handleSubmit}>Submit</button>
             <button type="cancel" className="btn btn-primary" value="cancel" onClick={handleCancel}>Cancel</button>
-
         </form>
+      </div>
     )
 }
 
@@ -86,3 +88,4 @@ function ReservationForm() {
 
 
 export default ReservationForm;
+export { createReservation };

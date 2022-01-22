@@ -78,3 +78,22 @@ export async function createReservation(params, signal) {
   };
   return await fetchJson(url, options, {});
 }
+
+export async function listTables(params, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, { headers, signal }, [])
+}
+
+export async function seatTable(params, signal) {
+  const url = `${API_BASE_URL}/tables`; //this file path might potentially cause backend tests to fail check /reservations
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: params}),
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
