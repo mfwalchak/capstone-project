@@ -11,6 +11,7 @@ exports.up = function (knex) {
       table.time("reservation_time").notNullable();
       table.smallint("people").notNullable();
       table.increments("reservation_id").primary();
+      table.varchar("status")
 
   });
 };

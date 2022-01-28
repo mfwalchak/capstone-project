@@ -33,6 +33,7 @@ async function list(req, res) {
   // }
 
   async function reservationExists(req, res, next){
+    //console.log("reservationService req data:", req.body.data)
     const reservation = await reservationsService.read(req.body.data.reservation_id);
     if (reservation) {
       res.locals.reservation = reservation;
@@ -42,7 +43,7 @@ async function list(req, res) {
   }
   
   async function tableExists(req, res, next){
-    console.log("tableExists:", req.body)
+    console.log("tableExists:", req.body.data)
     const table = await tablesService.read(req.body.data.table_id);
     if (table) {
       res.locals.table = table;
@@ -131,5 +132,5 @@ async function list(req, res) {
   module.exports = {
       list: asyncErrorBoundary(list),
       post: [hasRequiredProperties, isTableNameValid, isTableCapacityValid, asyncErrorBoundary(create)],
-      put: [isReservationValid, asyncErrorBoundary(reservationExists), isTableBigEnough, isTableOccupied, asyncErrorBoundary(update)]
+      put: [isReservationValid, asyncErrorBoundary(reservationExists), asyncErrorBoundary(tableExists), isTableBigEnough, isTableOccupied, asyncErrorBoundary(update)]
   };

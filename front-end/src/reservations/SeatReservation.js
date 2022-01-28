@@ -27,7 +27,7 @@ export default function SeatReservation() {
   function handleSubmit(evt) {
     const abortController = new AbortController();
     evt.preventDefault();
-    console.log(`seatTable ${reservation_id} ${selectTable.table_id}`);
+    //console.log(`seatTable resId: ${reservation_id} tableId:${selectTable.table_id}`);
     selectTable.reservation_id = reservation_id;
     //console.log("selectTablePassedIntoAPI", selectTable);
     console.log("selectTableTO API", selectTable)

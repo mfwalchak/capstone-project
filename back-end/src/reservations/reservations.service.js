@@ -1,5 +1,12 @@
 const knex = require("../db/connection");
 
+function read(reservation_id){
+    return knex("reservations")
+        .select("*")
+        .where({ reservation_id })
+        .first
+}
+
 function list(reservation_date, reservation_time) {
     return knex("reservations as r")
         .select("*")
@@ -16,6 +23,7 @@ function create(newReso) {
 }
 
 module.exports = {
+    read,
     list,
     create,
 }

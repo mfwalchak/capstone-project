@@ -101,9 +101,10 @@ export async function createTable(params, signal) {
 }
 
 export async function seatTable(params, signal) {
-  const url = `${API_BASE_URL}/tables`; //this file path might potentially cause backend tests to fail check /reservations
+  console.log("frontendAPI params", params)
+  const url = `${API_BASE_URL}/tables/${params.table_id}/seat/`; //this file path might potentially cause backend tests to fail check /reservations
   const options = {
-    method: "POST",
+    method: "PUT",
     headers,
     body: JSON.stringify({ data: params}),
     signal,
