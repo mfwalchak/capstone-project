@@ -49,10 +49,10 @@ function reservationNotInPast(req, res, next){
   try {
     let now = new Date();
     // console.log("notInPast", day.getDate(), now.getDate())
-    if (day.getDate() < now.getDate()) {
+    if (day < now) {
       //console.log("Inside the NotInPast Condition!")//check if date is in the past
       const error = new Error(`${date}`);
-      error.message="future";
+      error.message="reservation must be in the future";
       error.status = 400;
       throw error;
     } next();
@@ -73,9 +73,9 @@ function reservationIsDuringBusinessHours(req, res, next){
   //reservations can only be created up to 60 minutes before closing
   //if reservation is before 10:30 am
   try{
-    if (time < "10:30" || time > "21:30"){
+    if (time < "10:30" || time >= "21:30"){
       const error = new Error(`${time}`);
-      error.message="I'm going to have to change this anyway";
+      error.message="cannot make a reservation at this time";
       error.status = 400;
       throw error;
     } next();
@@ -88,8 +88,8 @@ function reservationIsEarlierToday(req, res, next) {
   let { data = {} } = req.body;
   let time = data.reservation_time;
   let now = new Date();
-  console.log("reservationEarlierTodayValidation")
-  console.log(time, `${now.getHours()}:${now.getMinutes()}`)
+  //console.log("reservationEarlierTodayValidation")
+  //console.log(time, `${now.getHours()}:${now.getMinutes()}`)
   try{
     if (time < `${now.getHours()}:${now.getMinutes()}`){
       const error = new Error(`${time}`);

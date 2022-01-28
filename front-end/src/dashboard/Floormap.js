@@ -1,48 +1,24 @@
-// import { listTables } from "../utils/api";
-// import React, { useState, useEffect } from "react";
+import { listTables } from "../utils/api";
+import React, { useState, useEffect } from "react";
 
+function FloorMap() {
+    const [tables, setTables] = useState([]);
+    const [error, setError] = useState(null);
 
+    useEffect(() => {
+        setError(null);
+        const abortController = new AbortController();
+        listTables(abortController.signal).then(setTables).catch(setError);
+    }, [])
 
+    return tables.map((table)=> {
+        return (
+            <ul>
+                <li key={table.table_id}>{`${table.table_name} seats ${table.capacity}`} 
+                <p data-table-id-status={`${table.table_id}`}>{!table.reservation_id ? "Free" : "Occupied"}</p></li>
+            </ul>
+        )
+    });
+}
 
-// function Floormap(tables) {
-
-//     return tables.map(table => {
-//         return(
-//             <ul>
-//                 <li>{table.table_name}</li>
-//             </ul>
-//         )
-//     })
-
-//     // const [tableNameError, setTableNameError] = useState()
-//     // const [tableNames, setTableNames] = useState({
-//     //     table_name: "",
-//     //     reservation_id: ""
-//     // })
-
-//     // useEffect(LoadFloorMap, [tableNames])
-
-//     // function LoadFloorMap(){
-//     //     const abortController = new AbortController();
-//     //     setTableNameError(null);
-//     //     listTables(tableNames, abortController.signal)
-//     //       .then(setTableNames)
-//     //       .catch(setTableNameError);
-//     //     return () => abortController.abort();
-//     // }
-
-//     //     tableNames.map(table => {
-//     //         return (
-//     //             <ul>
-//     //                 <li>{table.table_name}</li>
-//     //             </ul>
-//     //         )
-//     // })
-
-//     // return(
-//     //     <div>
-//     //         <LoadFloorMap />
-//     //     </div>
-//     // )
-// }
-// export default Floormap;
+export default FloorMap;

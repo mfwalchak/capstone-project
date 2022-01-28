@@ -4,6 +4,7 @@ exports.up = function(knex) {
     .withSchema('public')
     .dropTableIfExists('tables')
     .createTable('tables', (table) => {
+      table.increments("table_id").primary();
       table.varchar("table_name").notNullable();
       table.smallint("capacity").notNullable();
       table.integer("reservation_id").unsigned();

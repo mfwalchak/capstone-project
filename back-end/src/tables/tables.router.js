@@ -7,7 +7,8 @@
  const router = require("express").Router();
  const controller = require("./tables.controller");
  
- router.route("/").get(controller.list).post(controller.post); //this will fail tests need everything routed off /
+ router.route("/").get(controller.list).post(controller.post);
+ router.route("/:table_id/seat").put(controller.put);
  
  
  

@@ -45,8 +45,9 @@ function ReservationForm() {
         .catch(setError);
     }
 
-    function handleCancel(){
-      history.push("/");
+    function handleCancel(evt){
+      evt.preventDefault();
+      history.goBack();
     }
 
     return (

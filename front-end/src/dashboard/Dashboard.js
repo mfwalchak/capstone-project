@@ -17,7 +17,7 @@ import { listTables } from "../utils/api";
 function Dashboard({ date }) {
   const query = useQuery();
   const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [error, setError] = useState(null);
   const [newDate, setNewDate] = useState(query.get("date") || date);
   const [tables, setTables] = useState([])
 
@@ -26,11 +26,11 @@ function Dashboard({ date }) {
   function loadDashboard() {
     //console.log("*******loadDash********", newDate);
     const abortController = new AbortController();
-    setReservationsError(null);
+    setError(null);
     listReservations({ date: newDate }, abortController.signal)
       //console.log("***********listReservationsNewDate***********", newDate)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setError);
       
     return () => abortController.abort();
   }
@@ -63,19 +63,20 @@ function Dashboard({ date }) {
   function ReservationsToday() {
     let count = 1;
     return reservations.map((reservation) => {
+      const { first_name, last_name, reservation_date, reservation_time, people, mobile_number, reservation_id } = reservation;
       return (
         <tr>
           <th scope="row">{count++}</th>
           <td>
-            {reservation.last_name}, {reservation.first_name}
+            {last_name}, {first_name}
           </td>
-          <td>{reservation.reservation_date}</td>
-          <td>{reservation.reservation_time}</td>
-          <td>{reservation.people}</td>
-          <td>{formatPhoneNumber(reservation.mobile_number)}</td>
+          <td>{reservation_date}</td>
+          <td>{reservation_time}</td>
+          <td>{people}</td>
+          <td>{formatPhoneNumber(mobile_number)}</td>
           <a
             className="btn btn-primary"
-            href={`/reservations/${reservation.reservation_id}/seat`}
+            href={`/reservations/${reservation_id}/seat`}
           >
             SEAT
           </a>
@@ -84,34 +85,23 @@ function Dashboard({ date }) {
     });
   }
 
-  const [tableNameError, setTableNameError] = useState();
-  const [tableNames, setTableNames] = useState({
-    table_name: "",
-    reservation_id: "",
-  });
-  useEffect(LoadFloorMap, [newDate]);
+  // const [tableNameError, setTableNameError] = useState();
+  // const [tableNames, setTableNames] = useState({
+  //   table_name: "",
+  //   reservation_id: "",
+  // });
+  // useEffect(LoadFloorMap, [newDate]);
 
-  function LoadFloorMap() {
-    const abortController = new AbortController();
-    setTableNameError(null);
-    listTables(tableNames, abortController.signal)
-      .then(setTableNames)
-      .catch(setTableNameError);
-    return () => abortController.abort();
-  }
+  // function LoadFloorMap() {
+  //   const abortController = new AbortController();
+  //   setError(null);
+  //   listTables()
+  //     .then(setTables)
+  //     .catch(setError);
+  //   return () => abortController.abort();
+  // }
 
-  function FloorMap(tables) {
-    console.log(tables.tables.map(table => console.log(table)));
-    return(<div></div>)
-    // return tables.map((table) => {
-    //   return (
-    //     <ul>
-    //       <li>{table.table_name}</li>
-    //       <li>{table.capacity}</li>
-    //     </ul>
-    //   );
-    // });
-  }
+
 
   return (
     <main>
@@ -137,7 +127,7 @@ function Dashboard({ date }) {
           partySize={reservations.people}
         />
       </div> */}
-      <ErrorAlert error={reservationsError} date={newDate} />
+      <ErrorAlert error={error} date={newDate} />
       <table class="table">
         <thead>
           <tr>
@@ -154,7 +144,7 @@ function Dashboard({ date }) {
         </tbody>
       </table>
       <div>
-        <FloorMap tables={tableNames} />
+        <FloorMap />
       </div>
       {/* {JSON.stringify(reservations)} */}
     </main>
@@ -176,16 +166,16 @@ export default Dashboard;
 //  */
 // function Dashboard({ date }) {
 //   const [reservations, setReservations] = useState([]);
-//   const [reservationsError, setReservationsError] = useState(null);
+//   const [error, setError] = useState(null);
 
 //   useEffect(loadDashboard, [date]);
 
 //   function loadDashboard() {
 //     const abortController = new AbortController();
-//     setReservationsError(null);
+//     setError(null);
 //     listReservations({ date }, abortController.signal)
 //       .then(setReservations)
-//       .catch(setReservationsError);
+//       .catch(setError);
 //     return () => abortController.abort();
 //   }
 
@@ -195,7 +185,7 @@ export default Dashboard;
 //       <div className="d-md-flex mb-3">
 //         <h4 className="mb-0">Reservations for date</h4>
 //       </div>
-//       <ErrorAlert error={reservationsError} />
+//       <ErrorAlert error={error} />
 //       {JSON.stringify(reservations)}
 //     </main>
 //   );

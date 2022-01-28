@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listReservations, seatTable } from "../utils/api";
+import { listReservations, createTable } from "../utils/api";
 
 function NewTable({ reservation_date, reservation_id, partySize }) {
   const history = useHistory();
@@ -12,33 +12,36 @@ function NewTable({ reservation_date, reservation_id, partySize }) {
   });
 
 
-    function handleNumberChange(evt){
+    function handleTableChange(evt){
         const value = evt.target.value;
-        setNewTable({...newTable, [evt.target.name]: Number(value)})
+        setNewTable({...newTable, [evt.target.name]: value})
     }
 
   function handleSubmit(evt) {
-      console.log("handleSubmit:", reservation_id);
+      //console.log("handleSubmit:", reservation_id);
       evt.preventDefault();
-      seatTable(newTable)
+      //setNewTable(newTable.table_id = newTable.table_name);
+      console.log(newTable.table_id);
+      createTable(newTable)
       .then(() => {
         history.push("/dashboard");
       })
       .catch(setError);
   }
-  function handleCancel() {
-    history.push("/");
+  function handleCancel(evt) {
+    evt.preventDefault();
+    history.goBack();
   }
 
   return (
-    <form>
+    <form key={newTable.table_id}>
       <label>
         Table #
-        <input type="text" name="table_name" value={newTable.table_name} onChange={handleNumberChange} />
+        <input type="text" name="table_name" value={newTable.table_name} onChange={handleTableChange} />
       </label>
       <label>
         Capacity
-        <input type="number" name="capacity" value={newTable.capacity} onChange={handleNumberChange} />
+        <input type="text" name="capacity" value={newTable.capacity} onChange={handleTableChange} />
       </label>
       <ErrorAlert error={error} />
       <button
