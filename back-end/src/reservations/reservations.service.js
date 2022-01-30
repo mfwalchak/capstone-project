@@ -8,7 +8,7 @@ function read(reservation_id){
 }
 
 function list(reservation_date, reservation_time) {
-    return knex("reservations as r")
+    return knex("reservations")
         .select("*")
         .where({ reservation_date })
         .orderBy("reservation_time")

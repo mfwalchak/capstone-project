@@ -6,8 +6,8 @@ const hasRequiredProperties = hasProperties("table_name","capacity");
 const reservationsService = require("../reservations/reservations.service")
 
 async function list(req, res) {
-    console.log("backend Req Date:", req.query.date);
-    const data = await tablesService.list(req.query.date);
+    //console.log("backend Req Date:", req.query.date);
+    const data = await tablesService.list();
     res.status(200).json({ data });
   }
   
@@ -43,8 +43,8 @@ async function list(req, res) {
   }
   
   async function tableExists(req, res, next){
-    console.log("tableExists:", req.body.data)
-    const table = await tablesService.read(req.body.data.table_id);
+    console.log("tableExists:", req.params.table_id)
+    const table = await tablesService.read(req.params.table_id);
     if (table) {
       res.locals.table = table;
       return next();
@@ -70,9 +70,9 @@ async function list(req, res) {
 
   function isTableCapacityValid(req, res, next){
     let {data = {} } = req.body;
-    //console.log("isTableCapacityValidDATA", typeof data.capacity)
+    console.log("isTableCapacityValidDATA", typeof data.capacity)
     try{
-      if(data.capacity < 1){
+      if(data.capacity < 1 || typeof(data.capacity) != "number"){
         const error = new Error("table must seat at least 1");
         error.message="capacity";
         error.status = 400;
@@ -102,9 +102,9 @@ async function list(req, res) {
   function isTableOccupied(req, res, next){
     const { table } = res.locals;
     try{    
-      if (table.reservation_id !== null) {
+      if (table.reservation_id) {
       const error = new Error("table is occupied!");
-      error.message = `occupado`;
+      error.message = `occupied`;
       error.status = 400;
       throw error;
       } next();

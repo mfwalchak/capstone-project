@@ -1,9 +1,9 @@
 
 exports.up = function(knex) {
     return knex.schema
-    .withSchema('public')
-    .dropTableIfExists('tables')
-    .createTable('tables', (table) => {
+    .withSchema("public")
+    .dropTableIfExists("tables")
+    .createTable("tables", (table) => {
       table.increments("table_id").primary();
       table.varchar("table_name").notNullable();
       table.smallint("capacity").notNullable();

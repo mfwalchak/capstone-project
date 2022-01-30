@@ -1,12 +1,13 @@
 const { KnexTimeoutError } = require("knex");
-const { table } = require("../db/connection");
+//const { table } = require("../db/connection");
 const knex = require("../db/connection");
 
 function read(table_id){
     return knex("tables")
         .select("*")
-        .where({ table_id })
+        .where({ table_id: table_id })
         .first();
+        
 }
 
 function list() {

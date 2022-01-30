@@ -1,8 +1,8 @@
 exports.up = function (knex) {
   return knex.schema
-    .withSchema('public')
-    .dropTableIfExists('reservations')
-    .createTable('reservations', (table) => {
+    .dropTableIfExists("reservations")
+    .withSchema("public")
+    .createTable("reservations", (table) => {
       table.timestamps(true, true); 
       table.varchar("first_name");
       table.varchar("last_name");
