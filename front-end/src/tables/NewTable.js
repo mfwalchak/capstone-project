@@ -22,7 +22,7 @@ function NewTable({ reservation_date, reservation_id, partySize }) {
       evt.preventDefault();
       newTable.capacity = Number(newTable.capacity);
       //setNewTable(newTable.table_id = newTable.table_name);
-      console.log(newTable.table_id);
+      //console.log(newTable.table_id);
       createTable(newTable)
       .then(() => {
         history.push("/dashboard");
