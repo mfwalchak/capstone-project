@@ -12,10 +12,14 @@ const timeFormat = /\d\d:\d\d/;
 function isValidDateFormat(req, res, next){
   let { data = {} } = req.body;
   let date = data.reservation_date;
+  console.log("isValidDateFormat:", date, typeof(date))
+  console.log("testing REGEX validation:", /\d\d\d\d-\d\d-\d\d/.test(date))
   try{
     if (!/\d\d\d\d-\d\d-\d\d/.test(date)){
         const error = new Error("reservation_date");
+        error.message = "invalid reservation_date";
         error.status = 400;
+        throw error;
     } next();
   } catch(error) {
     next(error);
@@ -75,7 +79,7 @@ function reservationIsDuringBusinessHours(req, res, next){
   try{
     if (time < "10:30" || time >= "21:30"){
       const error = new Error(`${time}`);
-      error.message="Reservations may be made during business hours up to 1 hour before closing";
+      error.message="reservation_time is invalid";
       error.status = 400;
       throw error;
     } next();
@@ -132,6 +136,12 @@ function isPartyValid(req, res, next){
   }
 }
 
+async function reservationExists(req, res, next){
+  //console.log("reservationExists:", req.params)
+  const data = await reservationsService.read(req.params.reservation_Id);
+  res.status(200).json({ data })
+}
+
 
 async function list(req, res) {
   //console.log("backend Req Date:", req.query.date);
@@ -145,6 +155,7 @@ async function create(req, res, next) {
 }
 
 module.exports = {
+  get: asyncErrorBoundary(reservationExists),
   list: asyncErrorBoundary(list),
   post: [
     hasRequiredProperties, 

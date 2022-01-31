@@ -85,24 +85,6 @@ function Dashboard({ date }) {
     });
   }
 
-  // const [tableNameError, setTableNameError] = useState();
-  // const [tableNames, setTableNames] = useState({
-  //   table_name: "",
-  //   reservation_id: "",
-  // });
-  // useEffect(LoadFloorMap, [newDate]);
-
-  // function LoadFloorMap() {
-  //   const abortController = new AbortController();
-  //   setError(null);
-  //   listTables()
-  //     .then(setTables)
-  //     .catch(setError);
-  //   return () => abortController.abort();
-  // }
-
-
-
   return (
     <main>
       <h1>Dashboard</h1>
@@ -120,13 +102,6 @@ function Dashboard({ date }) {
           Next
         </button>
       </div>
-      {/* <div>
-        <NewTable
-          reservation_date={reservations.reservation_date}
-          reservation_id={reservations.reservation_id}
-          partySize={reservations.people}
-        />
-      </div> */}
       <ErrorAlert error={error} date={newDate} />
       <table class="table">
         <thead>

@@ -41,7 +41,7 @@ function NewTable({ reservation_date, reservation_id, partySize }) {
       </label>
       <label>
         Capacity
-        <input type="text" name="capacity" value={newTable.capacity} onChange={handleTableChange} />
+        <input type="number" name="capacity" min="1" value={newTable.capacity} onChange={handleTableChange} />
       </label>
       <ErrorAlert error={error} />
       <button

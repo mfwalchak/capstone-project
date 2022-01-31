@@ -15,7 +15,12 @@ function FloorMap() {
         return (
             <ul>
                 <li key={table.table_id}>{`${table.table_name} seats ${table.capacity}`} 
-                <p data-table-id-status={`${table.table_id}`}>{!table.reservation_id ? "Free" : "Occupied"}</p></li>
+                <p data-table-id-status={`${table.table_id}`}>{!table.reservation_id ? "Free" : "Occupied"}
+                    {/* <button data-table-id-finish={table.table_id} className="btn btn-secondary">
+                        {this.parentElement.innerHTML.includes("Occupied") ? "Clear" : null}
+                    </button> */}
+                </p>
+                </li>
             </ul>
         )
     });

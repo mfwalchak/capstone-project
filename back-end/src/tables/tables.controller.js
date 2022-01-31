@@ -33,20 +33,22 @@ async function list(req, res) {
   // }
 
   async function reservationExists(req, res, next){
-    //console.log("reservationService req data:", req.body.data)
+    //console.log("reservationExists:", req.body.data)
     const reservation = await reservationsService.read(req.body.data.reservation_id);
     if (reservation) {
       res.locals.reservation = reservation;
+      //console.log("res.locals", res.locals)
       return next();
     }
     next({ status: 404, message: "999"})
   }
   
   async function tableExists(req, res, next){
-    console.log("tableExists:", req.params.table_id)
+    //console.log("tableExists:", req.params.table_id)
     const table = await tablesService.read(req.params.table_id);
     if (table) {
       res.locals.table = table;
+      //console.log("res.locals.table", res.locals.table)
       return next();
     }
     next({ status: 404, message: "table not found"})
@@ -70,11 +72,11 @@ async function list(req, res) {
 
   function isTableCapacityValid(req, res, next){
     let {data = {} } = req.body;
-    console.log("isTableCapacityValidDATA", typeof data.capacity)
+    //console.log("isTableCapacityValidDATA", data.capacity, typeof(parseInt(data.capacity)))
     try{
       if(data.capacity < 1 || typeof(data.capacity) != "number"){
         const error = new Error("table must seat at least 1");
-        error.message="capacity";
+        error.message="capacity must be a number greater than 0";
         error.status = 400;
         throw error;
       } next();
@@ -86,11 +88,11 @@ async function list(req, res) {
   function isTableBigEnough(req, res, next){
     const people = res.locals.reservation.people;
     const capacity = res.locals.table.capacity;
-    console.log("isTablesBigEnough", req.body.data)
+    //console.log("isTablesBigEnough", people, capacity);
     try{    
       if (people > capacity) {
       const error = new Error("party size exceeds table capacity");
-      error.message = `Table can only seat ${capacity} guests.`;
+      error.message = `Party size exceeds table capacity`;
       error.status = 400;
       throw error;
       } next();

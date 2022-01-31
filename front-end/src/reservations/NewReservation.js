@@ -36,7 +36,7 @@ function ReservationForm() {
       //console.log(reservationObject);
       //alert(`A new reservation was submitted for ` + reservation.last_name + `, people of ` + reservation.people);
       evt.preventDefault();
-      const day = new Date(`${reservation.reservation_date} ${reservation.reservation_time}`)
+      //const day = new Date(`${reservation.reservation_date} ${reservation.reservation_time}`)
 
       createReservation(reservationObject)
         .then(() =>{
