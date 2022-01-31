@@ -12,10 +12,14 @@ const timeFormat = /\d\d:\d\d/;
 function isValidDateFormat(req, res, next){
   let { data = {} } = req.body;
   let date = data.reservation_date;
+  console.log("isValidDateFormat:", date, typeof(date))
+  console.log("testing REGEX validation:", /\d\d\d\d-\d\d-\d\d/.test(date))
   try{
     if (!/\d\d\d\d-\d\d-\d\d/.test(date)){
         const error = new Error("reservation_date");
+        error.message = "invalid reservation_date";
         error.status = 400;
+        throw error;
     } next();
   } catch(error) {
     next(error);
@@ -49,10 +53,10 @@ function reservationNotInPast(req, res, next){
   try {
     let now = new Date();
     // console.log("notInPast", day.getDate(), now.getDate())
-    if (day.getDate() < now.getDate()) {
+    if (day < now) {
       //console.log("Inside the NotInPast Condition!")//check if date is in the past
       const error = new Error(`${date}`);
-      error.message="future";
+      error.message="reservation must be in the future";
       error.status = 400;
       throw error;
     } next();
@@ -73,9 +77,13 @@ function reservationIsDuringBusinessHours(req, res, next){
   //reservations can only be created up to 60 minutes before closing
   //if reservation is before 10:30 am
   try{
-    if (time < "10:30" || time > "21:30"){
+    if (time < "10:30" || time >= "21:30"){
       const error = new Error(`${time}`);
+<<<<<<< HEAD
       error.message="Reservation must be during business hours";
+=======
+      error.message="reservation_time is invalid";
+>>>>>>> us-04
       error.status = 400;
       throw error;
     } next();
@@ -88,10 +96,10 @@ function reservationIsEarlierToday(req, res, next) {
   let { data = {} } = req.body;
   let time = data.reservation_time;
   let now = new Date();
-  console.log("reservationEarlierTodayValidation")
-  console.log(time, `${now.getHours()}:${now.getMinutes()}`)
+  //console.log("reservationEarlierTodayValidation")
+  //console.log(time, `${now.getHours()}:${now.getMinutes()}`)
   try{
-    if (time < `${now.getHours()}:${now.getMinutes()}`){
+    if (time < now){
       const error = new Error(`${time}`);
       error.message="Reservation must be for a time in the future";
       error.status = 400;
@@ -132,6 +140,12 @@ function isPartyValid(req, res, next){
   }
 }
 
+async function reservationExists(req, res, next){
+  //console.log("reservationExists:", req.params)
+  const data = await reservationsService.read(req.params.reservation_Id);
+  res.status(200).json({ data })
+}
+
 
 async function list(req, res) {
   //console.log("backend Req Date:", req.query.date);
@@ -145,6 +159,7 @@ async function create(req, res, next) {
 }
 
 module.exports = {
+  get: asyncErrorBoundary(reservationExists),
   list: asyncErrorBoundary(list),
   post: [
     hasRequiredProperties, 

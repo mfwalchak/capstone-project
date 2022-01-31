@@ -1,8 +1,8 @@
 exports.up = function (knex) {
   return knex.schema
-    .withSchema('public')
-    .dropTableIfExists('reservations')
-    .createTable('reservations', (table) => {
+    .dropTableIfExists("reservations")
+    .withSchema("public")
+    .createTable("reservations", (table) => {
       table.timestamps(true, true); 
       table.varchar("first_name");
       table.varchar("last_name");
@@ -11,10 +11,11 @@ exports.up = function (knex) {
       table.time("reservation_time").notNullable();
       table.smallint("people").notNullable();
       table.increments("reservation_id").primary();
+      table.varchar("status")
 
   });
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable("reservations");
+  return knex.schema.dropTableIfExists("reservations");
 };

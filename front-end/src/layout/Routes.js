@@ -7,6 +7,7 @@ import NewTable from "../tables/NewTable";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
+import SeatReservation from "../reservations/SeatReservation";
 //import { useParams } from "react-router-dom";
 
 
@@ -30,16 +31,15 @@ function Routes() {
       </Route>
       <Route exact={true} path="/dashboard">
         <Dashboard date={today()} />
-        {/* may eventually need this logic for back and forth buttons {date || today()} */}
       </Route>
-      {/* <Route path="/dashboard/:date">
-        <Dashboard date={date} />
-      </Route> */}
       <Route path="/reservations/new">
         <NewReservation />
       </Route>
       <Route exact={true} path="/tables/new">
         <NewTable />
+      </Route>
+      <Route exact={true} path="/reservations/:reservation_id/seat">
+        <SeatReservation />
       </Route>
       <Route>
         <NotFound />
