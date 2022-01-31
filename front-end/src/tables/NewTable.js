@@ -20,6 +20,7 @@ function NewTable({ reservation_date, reservation_id, partySize }) {
   function handleSubmit(evt) {
       //console.log("handleSubmit:", reservation_id);
       evt.preventDefault();
+      newTable.capacity = Number(newTable.capacity);
       //setNewTable(newTable.table_id = newTable.table_name);
       console.log(newTable.table_id);
       createTable(newTable)
