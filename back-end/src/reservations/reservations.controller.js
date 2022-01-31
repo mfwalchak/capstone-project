@@ -79,11 +79,7 @@ function reservationIsDuringBusinessHours(req, res, next){
   try{
     if (time < "10:30" || time >= "21:30"){
       const error = new Error(`${time}`);
-<<<<<<< HEAD
-      error.message="Reservation must be during business hours";
-=======
       error.message="reservation_time is invalid";
->>>>>>> us-04
       error.status = 400;
       throw error;
     } next();
