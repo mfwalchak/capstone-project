@@ -87,6 +87,7 @@ export default function SeatReservation() {
     <>
       <form onSubmit={handleSubmit}>
         <select name="table_id" value={tableIdentifier} onChange={handleSelect}>
+          <option>Select a Table</option>
           <SelectTable />
         </select>
         <button type="submit" className="btn btn-primary" value="submit">

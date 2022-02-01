@@ -20,8 +20,9 @@ function Dashboard({ date }) {
   const [error, setError] = useState(null);
   const [newDate, setNewDate] = useState(query.get("date") || date);
   const [tables, setTables] = useState([])
+  const [resoStatus, setResoStatus] = useState("")
 
-  useEffect(loadDashboard, [newDate]);
+  useEffect(loadDashboard, [newDate, resoStatus]);
 
   function loadDashboard() {
     //console.log("*******loadDash********", newDate);
@@ -63,25 +64,23 @@ function Dashboard({ date }) {
   function ReservationsToday() {
     let count = 1;
     return reservations.map((reservation) => {
-      const { first_name, last_name, reservation_date, reservation_time, people, mobile_number, reservation_id } = reservation;
-      return (
-        <tr>
-          <th scope="row">{count++}</th>
-          <td>
-            {last_name}, {first_name}
-          </td>
-          <td>{reservation_date}</td>
-          <td>{reservation_time}</td>
-          <td>{people}</td>
-          <td>{formatPhoneNumber(mobile_number)}</td>
-          <a
-            className="btn btn-primary"
-            href={`/reservations/${reservation_id}/seat`}
-          >
-            SEAT
-          </a>
-        </tr>
-      );
+      const { first_name, last_name, reservation_date, reservation_time, people, mobile_number, reservation_id, status } = reservation;
+      if (status !== "finished") {
+        return (
+          <tr>
+            <th scope="row">{count++}</th>
+            <td>
+              {last_name}, {first_name}
+            </td>
+            <td>{reservation_date}</td>
+            <td>{reservation_time}</td>
+            <td>{people}</td>
+            <td>{formatPhoneNumber(mobile_number)}</td>
+            <td data-reservation-id-status={reservation_id}>{status}</td>
+            {status === "booked" ? <a className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>SEAT</a> : null }
+          </tr>
+        )
+      } return null;
     });
   }
 
@@ -112,6 +111,7 @@ function Dashboard({ date }) {
             <th scope="col">Time</th>
             <th scope="col">Party Size</th>
             <th scope="col">Mobile</th>
+            <th scope="col">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -119,7 +119,7 @@ function Dashboard({ date }) {
         </tbody>
       </table>
       <div>
-        <FloorMap />
+        <FloorMap setResoStatus={setResoStatus}/>
       </div>
       {/* {JSON.stringify(reservations)} */}
     </main>

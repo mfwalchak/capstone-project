@@ -16,6 +16,7 @@ function ReservationForm() {
         reservation_date: "", //assign default value of current reservation_date
         reservation_time: "", //controlled input 
         people: "",
+        status: "booked"
     })
     const reservationObject = reservation;
     const [ error, setError ] = useState(null);

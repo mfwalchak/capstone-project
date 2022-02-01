@@ -8,7 +8,7 @@
  const controller = require("./tables.controller");
  
  router.route("/").get(controller.list).post(controller.post);
- router.route("/:table_id/seat").put(controller.put);
+ router.route("/:table_id/seat").put(controller.put).delete(controller.delete);
  
  
  

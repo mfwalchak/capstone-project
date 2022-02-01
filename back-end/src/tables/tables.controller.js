@@ -12,7 +12,7 @@ async function list(req, res) {
   }
   
   async function create(req, res, next) {
-    //console.log("controllerCreateReq:", req.body);
+    console.log("controllerCreateReq:", req.body);
     const data = await tablesService.create(req.body.data);
     //console.log("controllerCreateResponse:", data);
     res.status(201).json({ data });
@@ -25,12 +25,11 @@ async function list(req, res) {
     res.status(200).json({ data });
   }
 
-  // async function destroy(req, res) {
-  //   const { table } = res.locals;
-  
-  //   await tablesService.clearTable(req.params.table_id, table.reservation_id);
-  //   res.status(200).json({});
-  // }
+  async function destroy(req, res) {
+    console.log("tablesControllerDestroy:", req.body.data)
+    const data = await tablesService.clearTable(req.body.data.reservation_id);
+    res.status(200).json({ data });
+  }
 
   async function reservationExists(req, res, next){
     //console.log("reservationExists:", req.body.data)
@@ -115,6 +114,19 @@ async function list(req, res) {
     }
   }
   
+  function isTableUnoccupied(req, res, next){
+    const { table } = res.locals;
+    try{    
+      if (!table.reservation_id) {
+      const error = new Error("table is already cleared");
+      error.message = `table is not occupied`;
+      error.status = 400;
+      throw error;
+      } next();
+    } catch(error) {
+        next(error)
+    }
+  }
 
   function isReservationValid(req, res, next){
     let {data = {} } = req.body;
@@ -134,5 +146,6 @@ async function list(req, res) {
   module.exports = {
       list: asyncErrorBoundary(list),
       post: [hasRequiredProperties, isTableNameValid, isTableCapacityValid, asyncErrorBoundary(create)],
-      put: [isReservationValid, asyncErrorBoundary(reservationExists), asyncErrorBoundary(tableExists), isTableBigEnough, isTableOccupied, asyncErrorBoundary(update)]
-  };
+      put: [isReservationValid, asyncErrorBoundary(reservationExists), asyncErrorBoundary(tableExists), isTableBigEnough, isTableOccupied, asyncErrorBoundary(update)],
+      delete: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(tableExists), isTableUnoccupied, asyncErrorBoundary(destroy)]
+    };

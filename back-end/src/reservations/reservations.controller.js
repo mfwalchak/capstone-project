@@ -144,8 +144,14 @@ async function reservationExists(req, res, next){
 
 
 async function list(req, res) {
-  //console.log("backend Req Date:", req.query.date);
-  const data = await reservationsService.list(req.query.date);
+  const { mobile_number } = req.query;
+  let data;
+  if ( mobile_number ) {
+    data = await reservationsService.search(req.query.mobile_number);
+    res.status(200).json({ data })
+  }
+  //console.log("reservationsLIST req.query.date", req.query.date);
+  data = await reservationsService.list(req.query.date);
   res.status(200).json({ data });
 }
 
@@ -153,6 +159,12 @@ async function create(req, res, next) {
   const data = await reservationsService.create(req.body.data);
   res.status(201).json({ data });
 }
+
+// async function search(req, res, next) {
+//   console.log("ControllerSEARCH:", req.query);
+//   const data = await reservationsService.search(req.query.mobile_number);
+//   res.status(200).json({ data });
+// }
 
 module.exports = {
   get: asyncErrorBoundary(reservationExists),
@@ -166,4 +178,5 @@ module.exports = {
     reservationIsEarlierToday,
     isValidTimeFormat, 
     isPartyValid, asyncErrorBoundary(create)],
+  //search: asyncErrorBoundary(search)
 };

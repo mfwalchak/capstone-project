@@ -31,6 +31,7 @@ headers.append("Content-Type", "application/json");
  */
 async function fetchJson(url, options, onCancel) {
   try {
+    console.log("FETCHJSON REQUEST", url, options)
     const response = await fetch(url, options);
 
     if (response.status === 204) {
@@ -42,6 +43,7 @@ async function fetchJson(url, options, onCancel) {
     if (payload.error) {
       return Promise.reject({ message: payload.error });
     }
+    console.log("FETCHJSON RETURN:", payload.data);
     return payload.data;
   } catch (error) {
     if (error.name !== "AbortError") {
@@ -68,6 +70,15 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+export async function findReservation(params, signal){
+  console.log("APIcall search:", params)
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  Object.entries(params).forEach(([key, value]) => 
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, {headers, signal }, []);
+}
+
 export async function createReservation(params, signal) {
   const url = `${API_BASE_URL}/reservations`; //this file path might potentially cause backend tests to fail check /reservations
   const options = {
@@ -79,12 +90,12 @@ export async function createReservation(params, signal) {
   return await fetchJson(url, options, {});
 }
 
-export async function listTables(params, signal) {
-  console.log("frontendAPI ListTables:", params);
+export async function listTables(signal) {
+  //console.log("frontendAPI ListTables:", params);
   const url = new URL(`${API_BASE_URL}/tables`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
+  // Object.entries(params).forEach(([key, value]) =>
+  //   url.searchParams.append(key, value.toString())
+  // );
   return await fetchJson(url, { headers, signal }, [])
 }
 
@@ -105,6 +116,18 @@ export async function seatTable(params, signal) {
   const url = `${API_BASE_URL}/tables/${params.table_id}/seat/`; //this file path might potentially cause backend tests to fail check /reservations
   const options = {
     method: "PUT",
+    headers,
+    body: JSON.stringify({ data: params}),
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
+
+export async function clearTable(params, signal){
+  console.log("APIcall clear table:", params)
+  const url = `${API_BASE_URL}/tables/${params.table_id}/seat/`;
+  const options = {
+    method: "DELETE",
     headers,
     body: JSON.stringify({ data: params}),
     signal,
