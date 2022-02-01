@@ -139,7 +139,12 @@ function isPartyValid(req, res, next){
 async function reservationExists(req, res, next){
   //console.log("reservationExists:", req.params)
   const data = await reservationsService.read(req.params.reservation_Id);
-  res.status(200).json({ data })
+  //res.status(200).json({ data })
+  if (data){
+    return next(res.status(200).json({ data }));
+  } next({ status: 404, message: `reservation ${req.params.reservation_Id} not found`})
+  //if reservation exists return next()
+  //if not status: 404, message
 }
 
 
