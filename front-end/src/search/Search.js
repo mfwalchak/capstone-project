@@ -45,23 +45,22 @@ export default function Search() {
                 <td>{people}</td>
                 <td>{mobile_number}</td>
                 <td data-reservation-id-status={reservation_id}>{status}</td>
-                {status === "booked" ? <a className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>SEAT</a> : null }
+                {/* {status === "booked" ? <a className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>SEAT</a> : null } */}
               </tr>
             )
         })
-    } else {
+    }
         return (
             <p>No reservations found</p>
         )
     }
-}
 
 
     return (
         <>
         <div>
             <input name="mobile_number" placeholder="Enter a customer's phone number" onChange={(evt) => setQuery(evt.target.value)} />
-            <button onClick={loadSearchResults}>Find</button>
+            <button type="submit" onClick={loadSearchResults}>Find</button>
         </div>
         <div>
             <DisplayMatchingReservations />

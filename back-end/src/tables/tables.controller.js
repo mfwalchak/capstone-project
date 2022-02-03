@@ -12,23 +12,25 @@ async function list(req, res) {
   }
   
   async function create(req, res, next) {
-    console.log("controllerCreateReq:", req.body);
+    //console.log("controllerCreateReq:", req.body);
     const data = await tablesService.create(req.body.data);
     //console.log("controllerCreateResponse:", data);
     res.status(201).json({ data });
   }
 
   async function update(req, res, next) {
-    console.log("controllerUpdateReq:", req.body, req.params);
+    //console.log("controllerUpdateReq:", req.body, req.params);
     const data = await tablesService.update(req.body.data.reservation_id, req.params.table_id);
-    console.log("controllerUpdateResponse:", data);
+    //console.log("controllerUpdateResponse:", data);
     res.status(200).json({ data });
   }
 
   async function destroy(req, res) {
-    console.log("tablesControllerDestroy:", req.body.data)
-    const data = await tablesService.clearTable(req.body.data.reservation_id);
-    res.status(200).json({ data });
+    const { table } = res.locals
+    //console.log("ControllerDestroyReq:", table.reservation_id)
+    //const { table_id } = req.params
+    await tablesService.clearTable(table.reservation_id);
+    res.status(200).json({})
   }
 
   async function reservationExists(req, res, next){
@@ -39,8 +41,25 @@ async function list(req, res) {
       //console.log("res.locals", res.locals)
       return next();
     }
-    next({ status: 404, message: "999"})
+    next({ status: 404, message: `reservation ${req.body.data.reservation_id} not found`})
   }
+
+
+
+  // async function reservationStatusCheck(req, res, next){
+  //   console.log("reservationIsSeated:", req.body.data)
+  //   if (req.body.data.status === "seated" || req.body.data.status === "finished"){
+  //     next({ status: 400, message: `reservation is ${req.body.data.status}`})
+  //   }
+  //   const status = await reservationsService.read(req.body.data.reservation_id);
+  //   console.log("reservationResponse:", res.body)
+  //   if (res.body.data.status !== "seated" || res.body.data.status !== "finished") {
+  //     //res.locals.reservation = reservation;
+  //     //console.log("res.locals", res.locals)
+  //     return next();
+  //   }
+  //   next({ status: 400, message: `reservation is ${status}`})
+  // }
   
   async function tableExists(req, res, next){
     //console.log("tableExists:", req.params.table_id)
@@ -50,7 +69,7 @@ async function list(req, res) {
       //console.log("res.locals.table", res.locals.table)
       return next();
     }
-    next({ status: 404, message: "table not found"})
+    next({ status: 404, message: `table ${req.params.table_id} not found`})
   }
   
 
@@ -143,9 +162,11 @@ async function list(req, res) {
   }
 
 
+
+
   module.exports = {
       list: asyncErrorBoundary(list),
       post: [hasRequiredProperties, isTableNameValid, isTableCapacityValid, asyncErrorBoundary(create)],
       put: [isReservationValid, asyncErrorBoundary(reservationExists), asyncErrorBoundary(tableExists), isTableBigEnough, isTableOccupied, asyncErrorBoundary(update)],
-      delete: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(tableExists), isTableUnoccupied, asyncErrorBoundary(destroy)]
+      delete: [asyncErrorBoundary(tableExists), isTableUnoccupied, asyncErrorBoundary(destroy)]
     };

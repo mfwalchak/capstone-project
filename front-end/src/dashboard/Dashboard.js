@@ -5,6 +5,8 @@ import useQuery from "../utils/useQuery";
 import { today, previous, next } from "../utils/date-time";
 import FloorMap from "./Floormap";
 import { listTables } from "../utils/api";
+import { Link, useHistory } from "react-router-dom";
+import { cancelReso } from "../utils/api";
 
 //import { useParams } from "react-router-dom";
 /**
@@ -21,6 +23,7 @@ function Dashboard({ date }) {
   const [newDate, setNewDate] = useState(query.get("date") || date);
   const [tables, setTables] = useState([])
   const [resoStatus, setResoStatus] = useState("")
+  const history = useHistory();
 
   useEffect(loadDashboard, [newDate, resoStatus]);
 
@@ -61,6 +64,20 @@ function Dashboard({ date }) {
     return null;
   }
 
+  async function handleReservationCancellation(reservation_id){
+    console.log("handleReservationCancellation params:", reservation_id)
+    //console.log("finishTableSetClearedState", "table_id:", table_id, "reservation_id", reservation_id, "setClearedState", setClearedState);
+    const cancellation = window.confirm("Do you want to cancel this reservation? This cannot be undone.")
+    if (cancellation){
+      try{
+        cancelReso(reservation_id)
+        history.go();
+      } catch(error){
+        setError(error);
+      }
+  }
+}
+
   function ReservationsToday() {
     let count = 1;
     return reservations.map((reservation) => {
@@ -77,7 +94,23 @@ function Dashboard({ date }) {
             <td>{people}</td>
             <td>{formatPhoneNumber(mobile_number)}</td>
             <td data-reservation-id-status={reservation_id}>{status}</td>
-            {status === "booked" ? <a className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>SEAT</a> : null }
+            {/* {status === "booked" ? <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary">SEAT</Link> : null} */}
+            <Link to={`/reservations/${reservation_id}/seat`}>
+              {status === "booked" ? <button type="button" className="btn btn-primary">SEAT</button> : null }
+            </Link>
+            {/* <a href={`/reservations/${reservation_id}/seat`}>{status === "booked" ? "SEAT" : null}</a> */}
+            <Link to={`/reservations/${reservation_id}/edit`}>
+              <button type="button" className="btn btn-primary">
+                EDIT
+              </button>
+            </Link>
+            <button 
+                type="button" 
+                data-reservation-id-cancel={reservation_id} 
+                className="btn btn-danger"
+                onClick={()=>handleReservationCancellation(reservation_id)}>
+                  CANCEL
+            </button>
           </tr>
         )
       } return null;

@@ -1,17 +1,24 @@
 const knex = require("../db/connection");
 
 function read(reservation_id){
-    console.log("reseravtionsServiceRead:", reservation_id);
+    //console.log("reseravtionsServiceRead:", reservation_id);
     return knex("reservations")
         .select("*")
         .where({ reservation_id: reservation_id })
         .first();
 }
+function list() {
+    return knex("reservations")
+        .select("*")
+        .orderBy("reservation_time");
+}
 
-function list(reservation_date, reservation_time) {
+function listByResoDate(reservation_date, reservation_time) {
     return knex("reservations")
         .select("*")
         .where({ reservation_date: reservation_date })
+        .whereNot({ status: "finished" }) //added 2.2 for test 6 validation
+        .whereNot({ status: "cancelled" })//added 2.2. for test 6 validation
         .orderBy("reservation_time")
 };
 
@@ -24,7 +31,7 @@ function create(newReso) {
 }
 
 function search(mobile_number) {
-    console.log("KNEX SEARCH:", mobile_number);
+    //console.log("KNEX SEARCH:", mobile_number);
     return knex("reservations")
         .whereRaw(
             "translate(mobile_number, '() -', '') like ?",
@@ -33,9 +40,36 @@ function search(mobile_number) {
         .orderBy("reservation_date");
   }
 
+  function updateResoStatus(reservation_id, status){
+    console.log("knexUpdateResoStatus:", status);
+    return knex("reservations")
+        .where({ reservation_id })
+        .update({ status })
+        .then(() => read(reservation_id));
+}
+
+function updateReso(updatedReso){
+    return knex("reservations")
+        .select("*")
+        .where ({ reservation_id: updatedReso.reservation_id })
+        .update(updatedReso, "*")
+        .then((reso) => reso[0]);
+}
+
+function destroy(reservation_id) {
+    return knex("reservations")
+        .select("*")
+        .where({ reservation_id})
+        .del();
+}
+
 module.exports = {
     read,
     list,
+    listByResoDate,
     create,
-    search
+    search,
+    updateResoStatus,
+    updateReso,
+    destroy
 }

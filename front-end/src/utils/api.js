@@ -72,11 +72,12 @@ export async function listReservations(params, signal) {
 
 export async function findReservation(params, signal){
   console.log("APIcall search:", params)
-  const url = new URL(`${API_BASE_URL}/reservations`);
+  const url = new URL(`${API_BASE_URL}/reservations/${params}`);
   Object.entries(params).forEach(([key, value]) => 
     url.searchParams.append(key, value.toString())
   );
-  return await fetchJson(url, {headers, signal }, []);
+  return await fetchJson(url, {headers, signal }, [])
+  .then(formatReservationDate);
 }
 
 export async function createReservation(params, signal) {
@@ -88,6 +89,19 @@ export async function createReservation(params, signal) {
     signal,
   };
   return await fetchJson(url, options, {});
+}
+
+export async function updateReservation(params, signal){
+  console.log("UPDATERESERVATION PARAMS:", params);
+  const url = new URL(`${API_BASE_URL}/reservations/${params.reservation_id}`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: params}),
+    signal,
+  };
+  return await fetchJson(url, options, {});
+
 }
 
 export async function listTables(signal) {
@@ -130,6 +144,17 @@ export async function clearTable(params, signal){
     method: "DELETE",
     headers,
     body: JSON.stringify({ data: params}),
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
+
+export async function cancelReso(reservation_id, signal){
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status: "cancelled" } }),
     signal,
   };
   return await fetchJson(url, options, {});

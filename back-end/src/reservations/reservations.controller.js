@@ -12,8 +12,8 @@ const timeFormat = /\d\d:\d\d/;
 function isValidDateFormat(req, res, next){
   let { data = {} } = req.body;
   let date = data.reservation_date;
-  console.log("isValidDateFormat:", date, typeof(date))
-  console.log("testing REGEX validation:", /\d\d\d\d-\d\d-\d\d/.test(date))
+  //console.log("isValidDateFormat:", date, typeof(date))
+  //console.log("testing REGEX validation:", /\d\d\d\d-\d\d-\d\d/.test(date))
   try{
     if (!/\d\d\d\d-\d\d-\d\d/.test(date)){
         const error = new Error("reservation_date");
@@ -136,28 +136,84 @@ function isPartyValid(req, res, next){
   }
 }
 
+function reservationStatusCheck(req, res, next) {
+  const { status } = req.body.data;
+  console.log("reservationStatusCheck", status);
+  const validStatus = ["booked", "seated", "finished", "cancelled"];
+  if (!validStatus.includes(status)){
+    return next({ status: 400, message: `Reservation status is ${status}. Must be booked, seated, finished or cancelled.`})
+  }
+    //   if (data.status == "booked" || data.status == "seated" || data.status == "finished"){
+  //     return next();
+  //   }
+    next ();
+  }
+
+  // async function reservationIsFinished(req, res, next) {
+  // const data = await reservationsService.read(req.params.reservation_Id);
+  //   if (data.status === "finished"){
+  //     return next({ status: 400, message: `Reservation is ${data.status}`});
+  //   } next();
+  // }
+
+  function reservationIsFinished(req, res, next){
+    const { status } = res.locals.reservation;
+    if (status === "finished"){
+      return next({ status: 400, message: `${status} reservations cannot be updated`});
+    }
+    next();
+  }
+
 async function reservationExists(req, res, next){
-  //console.log("reservationExists:", req.params)
+  console.log("reservationExists:", req.params.reservation_Id)
   const data = await reservationsService.read(req.params.reservation_Id);
   //res.status(200).json({ data })
   if (data){
-    return next(res.status(200).json({ data }));
+    res.locals.reservation = data;
+    return next();
+    //return next(res.status(200).json({ data }));
   } next({ status: 404, message: `reservation ${req.params.reservation_Id} not found`})
   //if reservation exists return next()
   //if not status: 404, message
 }
 
+function reservationAlreadyExists(req, res, next){
+  if (req.body.data.status){
+    if (req.body.data.status !== "booked"){
+      next({ status: 400, message: `Reservation is already ${req.body.data.status}`});
+    }
+  } next();
+}
+
+// async function reservationAlreadyExists(req, res, next){
+//   //console.log("reservationExists:", req.body.data)
+//   const reservation = await reservationsService.read(req.body.data.reservation_id);
+//   if (!reservation) {
+//     res.locals.reservation = reservation;
+//     //console.log("res.locals", res.locals)
+//     return next();
+//   }
+//   next({ status: 400, message: `reservation ${req.body.data.reservation_id} already exists`})
+// }
+
 
 async function list(req, res) {
+  const { date } = req.query;
   const { mobile_number } = req.query;
   let data;
   if ( mobile_number ) {
     data = await reservationsService.search(req.query.mobile_number);
     res.status(200).json({ data })
+  } else if ( date ) {
+    data = await reservationsService.listByResoDate(req.query.date)
+    res.status(200).json({ data });
+  } else {
+    data = await reservationsService.list();
+    res.status(200).json({ data })
   }
   //console.log("reservationsLIST req.query.date", req.query.date);
-  data = await reservationsService.list(req.query.date);
-  res.status(200).json({ data });
+  // data = await reservationsService.list(req.query.date);
+  // res.status(200).json({ data });
 }
 
 async function create(req, res, next) {
@@ -165,14 +221,38 @@ async function create(req, res, next) {
   res.status(201).json({ data });
 }
 
-// async function search(req, res, next) {
-//   console.log("ControllerSEARCH:", req.query);
-//   const data = await reservationsService.search(req.query.mobile_number);
-//   res.status(200).json({ data });
-// }
+async function updateReservationStatus(req, res, next) {
+  //console.log("controllerUpdateReq:", req.body, req.params);
+  const { reservation_id } = res.locals.reservation;
+  const { status } = req.body.data;
+  const data = await reservationsService.updateResoStatus(reservation_id, status);
+  //console.log("controllerUpdateResponse:", data);
+  //res.status(200).json({ data });
+  res.json({ data });
+}
+
+async function updateReservation(req, res, next){
+  const { reservation_id } = res.locals.reservation;
+  const updatedReso = { ...req.body.data, reservation_id};
+  const data = await reservationsService.updateReso(updatedReso);
+  res.status(200).json({ data });
+}
+
+async function destroy(req, res){
+  const { reservation } = res.locals;
+  await reservationsService.destroy(reservation.reservation_id);
+  res.sendStatus(204);
+}
+
+async function readReservation(req, res, next) {
+  //console.log("ControllerREAD:", req.query);
+  const { reservation } = res.locals;
+  const data = await reservationsService.read(reservation.reservation_id);
+  res.status(200).json({ data });
+}
 
 module.exports = {
-  get: asyncErrorBoundary(reservationExists),
+  get: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(readReservation)],
   list: asyncErrorBoundary(list),
   post: [
     hasRequiredProperties, 
@@ -182,6 +262,26 @@ module.exports = {
     reservationIsDuringBusinessHours,
     reservationIsEarlierToday,
     isValidTimeFormat, 
-    isPartyValid, asyncErrorBoundary(create)],
+    isPartyValid,
+    reservationAlreadyExists,
+    asyncErrorBoundary(create)],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists), 
+    reservationStatusCheck, 
+    reservationIsFinished, 
+    asyncErrorBoundary(updateReservationStatus)],
+  updateReservation: [
+    asyncErrorBoundary(reservationExists),
+    hasRequiredProperties, 
+    isValidDateFormat, 
+    isNotATuesday, 
+    reservationNotInPast,
+    reservationIsDuringBusinessHours,
+    reservationIsEarlierToday,
+    isValidTimeFormat, 
+    isPartyValid,
+    reservationAlreadyExists,
+    asyncErrorBoundary(updateReservation),],
+  delete: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(destroy)],
   //search: asyncErrorBoundary(search)
 };

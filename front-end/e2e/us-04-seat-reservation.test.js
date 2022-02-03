@@ -253,7 +253,7 @@ describe("US-04 - Seat reservation - E2E", () => {
         path: ".screenshots/us-04-dashboard-seat-button-before.png",
         fullPage: true,
       });
-
+      //console.log("******TEST******HREF:", `/reservations/${reservation.reservation_id}/seat`)
       const hrefSelector = `[href="/reservations/${reservation.reservation_id}/seat"]`;
 
       await page.waitForSelector(hrefSelector);
