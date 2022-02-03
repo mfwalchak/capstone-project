@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listReservations, createTable } from "../utils/api";
+import createTable from "../utils/api";
 
+//render form to create a new table
 function NewTable({ reservation_date, reservation_id, partySize }) {
   const history = useHistory();
   const [error, setError] = useState(null);
@@ -11,19 +12,16 @@ function NewTable({ reservation_date, reservation_id, partySize }) {
     capacity: "",
   });
 
-
-    function handleTableChange(evt){
-        const value = evt.target.value;
-        setNewTable({...newTable, [evt.target.name]: value})
-    }
+  //handle form changes and submission
+  function handleTableChange(evt) {
+    const value = evt.target.value;
+    setNewTable({ ...newTable, [evt.target.name]: value });
+  }
 
   function handleSubmit(evt) {
-      //console.log("handleSubmit:", reservation_id);
-      evt.preventDefault();
-      newTable.capacity = Number(newTable.capacity);
-      //setNewTable(newTable.table_id = newTable.table_name);
-      //console.log(newTable.table_id);
-      createTable(newTable)
+    evt.preventDefault();
+    newTable.capacity = Number(newTable.capacity);
+    createTable(newTable)
       .then(() => {
         history.push("/dashboard");
       })
@@ -38,11 +36,22 @@ function NewTable({ reservation_date, reservation_id, partySize }) {
     <form key={newTable.table_id}>
       <label>
         Table #
-        <input type="text" name="table_name" value={newTable.table_name} onChange={handleTableChange} />
+        <input
+          type="text"
+          name="table_name"
+          value={newTable.table_name}
+          onChange={handleTableChange}
+        />
       </label>
       <label>
         Capacity
-        <input type="number" name="capacity" min="1" value={newTable.capacity} onChange={handleTableChange} />
+        <input
+          type="number"
+          name="capacity"
+          min="1"
+          value={newTable.capacity}
+          onChange={handleTableChange}
+        />
       </label>
       <ErrorAlert error={error} />
       <button

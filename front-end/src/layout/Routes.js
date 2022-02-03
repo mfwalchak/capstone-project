@@ -10,7 +10,6 @@ import useQuery from "../utils/useQuery";
 import SeatReservation from "../reservations/SeatReservation";
 import Search from "../search/Search";
 import EditReservation from "../reservations/EditReservation";
-//import { useParams } from "react-router-dom";
 
 
 /**
@@ -21,8 +20,6 @@ import EditReservation from "../reservations/EditReservation";
  * @returns {JSX.Element}
  */
 function Routes() {
-  const query = useQuery();
-  const date = query.get("date"); 
   return (
     <Switch>
       <Route exact={true} path="/">

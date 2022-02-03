@@ -31,7 +31,6 @@ headers.append("Content-Type", "application/json");
  */
 async function fetchJson(url, options, onCancel) {
   try {
-    console.log("FETCHJSON REQUEST", url, options)
     const response = await fetch(url, options);
 
     if (response.status === 204) {
@@ -43,7 +42,6 @@ async function fetchJson(url, options, onCancel) {
     if (payload.error) {
       return Promise.reject({ message: payload.error });
     }
-    console.log("FETCHJSON RETURN:", payload.data);
     return payload.data;
   } catch (error) {
     if (error.name !== "AbortError") {
@@ -70,14 +68,14 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
-export async function findReservation(params, signal){
-  console.log("APIcall search:", params)
+export async function findReservation(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${params}`);
-  Object.entries(params).forEach(([key, value]) => 
+  Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
-  return await fetchJson(url, {headers, signal }, [])
-  .then(formatReservationDate);
+  return await fetchJson(url, { headers, signal }, []).then(
+    formatReservationDate
+  );
 }
 
 export async function createReservation(params, signal) {
@@ -85,71 +83,62 @@ export async function createReservation(params, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({ data: params}),
+    body: JSON.stringify({ data: params }),
     signal,
   };
   return await fetchJson(url, options, {});
 }
 
-export async function updateReservation(params, signal){
-  console.log("UPDATERESERVATION PARAMS:", params);
+export async function updateReservation(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${params.reservation_id}`);
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: params}),
+    body: JSON.stringify({ data: params }),
     signal,
   };
   return await fetchJson(url, options, {});
-
 }
 
 export async function listTables(signal) {
-  //console.log("frontendAPI ListTables:", params);
   const url = new URL(`${API_BASE_URL}/tables`);
-  // Object.entries(params).forEach(([key, value]) =>
-  //   url.searchParams.append(key, value.toString())
-  // );
-  return await fetchJson(url, { headers, signal }, [])
+  return await fetchJson(url, { headers, signal }, []);
 }
 
 export async function createTable(params, signal) {
-  console.log("frontendAPI CreateTable:", params)
-  const url = `${API_BASE_URL}/tables`; //this file path might potentially cause backend tests to fail check /reservations
+  const url = `${API_BASE_URL}/tables`;
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({ data: params}),
+    body: JSON.stringify({ data: params }),
     signal,
   };
   return await fetchJson(url, options, {});
 }
 
 export async function seatTable(params, signal) {
-  console.log("frontendAPI params", params)
-  const url = `${API_BASE_URL}/tables/${params.table_id}/seat/`; //this file path might potentially cause backend tests to fail check /reservations
+  const url = `${API_BASE_URL}/tables/${params.table_id}/seat/`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: params}),
+    body: JSON.stringify({ data: params }),
     signal,
   };
   return await fetchJson(url, options, {});
 }
 
-export async function clearTable(params, signal){
-  console.log("APIcall clear table:", params)
+export async function clearTable(params, signal) {
   const url = `${API_BASE_URL}/tables/${params.table_id}/seat/`;
   const options = {
     method: "DELETE",
     headers,
-    body: JSON.stringify({ data: params}),
+    body: JSON.stringify({ data: params }),
     signal,
   };
   return await fetchJson(url, options, {});
 }
 
-export async function cancelReso(reservation_id, signal){
+export async function cancelReso(reservation_id, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
   const options = {
     method: "PUT",

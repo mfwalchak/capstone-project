@@ -1,5 +1,3 @@
-//display the reservation form with the existing reservation data
-//existing data reservation id is the route paramaters of this page (i.e. /reservations/6/edit display reservation_id: 6 info)
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {
@@ -15,9 +13,9 @@ export default function EditReservation() {
   const { reservation_id } = useParams();
   const history = useHistory();
 
+  //change handlers for reservation form
   function handleChange(evt) {
     const value = evt.target.value;
-    console.log("handleChange:", value);
     setReservationForm({ ...reservationForm, [evt.target.name]: value });
   }
   function handleNumberChange(evt) {
@@ -32,11 +30,10 @@ export default function EditReservation() {
     history.goBack();
   }
 
+  //if reservation is being updated PUT API request
+  //if reservation does not exist this page has been reached directly in the url, create a new reservation
   function handleSubmit(evt) {
-    //console.log(reservationObject);
-    //alert(`A new reservation was submitted for ` + reservation.last_name + `, people of ` + reservation.people);
     evt.preventDefault();
-    //const day = new Date(`${reservation.reservation_date} ${reservation.reservation_time}`)
     if (reservation_id) {
       updateReservation(reservationForm)
         .then(() => {
@@ -52,8 +49,8 @@ export default function EditReservation() {
     }
   }
 
+  //re-render whenever the reservation_id changes, displaying that reservation's current data
   useEffect(() => {
-    console.log("EditReservationUSEFFECT:", reservation_id);
     const abortController = new AbortController();
     setError(null);
     if (reservation_id) {
