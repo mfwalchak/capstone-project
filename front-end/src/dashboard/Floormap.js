@@ -14,10 +14,10 @@ function FloorMap({ setResoStatus }) {
     listTables(abortController.signal).then(setTables).catch(setError);
   }, [clearedState]);
 
-  return tables.map((table) => {
+  return tables.map((table, index) => {
     return (
       <ul>
-        <li key={table.table_id}>
+        <li key={index}>
           {`${table.table_name} seats ${table.capacity}`}
           <p data-table-id-status={`${table.table_id}`}>
             {!table.reservation_id ? "Free" : "Occupied"}

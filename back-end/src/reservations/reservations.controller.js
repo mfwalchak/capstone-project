@@ -46,7 +46,6 @@ function isNotATuesday(req, res, next) {
 }
 /* ******BUG FIX NEEDED: This works locally. Deployed version throws error for reservations made on the same day******** */
 function reservationNotInPast(req, res, next) {
-  //console.log("reservationNotInPastValidator")
   let { data = {} } = req.body;
   let date = data.reservation_date;
   let time = data.reservation_time;
@@ -54,9 +53,7 @@ function reservationNotInPast(req, res, next) {
 
   try {
     let now = new Date();
-    // console.log("notInPast", day.getDate(), now.getDate())
     if (day < now) {
-      //console.log("Inside the NotInPast Condition!")//check if date is in the past
       const error = new Error(`${date}`);
       error.message = "reservation must be in the future";
       error.status = 400;
@@ -183,16 +180,23 @@ async function reservationExists(req, res, next) {
 }
 //list all reservations or list filtered by phone number or date
 async function list(req, res) {
-  const { date } = req.query;
-  const { mobile_number } = req.query;
+  const date = req.query.date;
+  const mobile_number = req.query.mobile_number;
+  const reservation_id = req.query.reservation_id;
   let data;
   if (mobile_number) {
+      //console.log("CONTROLLER IF MOBILE IS TRUE:", mobile_number);
     data = await reservationsService.search(req.query.mobile_number);
     res.status(200).json({ data });
   } else if (date) {
+      //console.log("CONTROLLER IF DATE IS TRUE", date)
     data = await reservationsService.listByResoDate(req.query.date);
     res.status(200).json({ data });
+  } else if (reservation_id){
+    data = await reservationsService.read(req.query.reservation_id);
+    res.status(200).json({ data });
   } else {
+      //console.log("CONTROLLER IF LIST ALL", req.query);
     data = await reservationsService.list();
     res.status(200).json({ data });
   }

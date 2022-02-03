@@ -99,20 +99,19 @@ function Dashboard({ date }) {
             <td>{people}</td>
             <td>{formatPhoneNumber(mobile_number)}</td>
             <td data-reservation-id-status={reservation_id}>{status}</td>
-            {/* {status === "booked" ? <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary">SEAT</Link> : null} */}
-            <Link to={`/reservations/${reservation_id}/seat`}>
+            {status === "booked" ? <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary">SEAT</Link> : null}
+            {/* <Link to={`/reservations/${reservation_id}/seat`}>
               {status === "booked" ? (
                 <button type="button" className="btn btn-primary">
                   SEAT
                 </button>
               ) : null}
-            </Link>
-            {/* <a href={`/reservations/${reservation_id}/seat`}>{status === "booked" ? "SEAT" : null}</a> */}
-            <Link to={`/reservations/${reservation_id}/edit`}>
-              <button type="button" className="btn btn-primary">
-                EDIT
-              </button>
-            </Link>
+            </Link> */}
+            {/* <a href={`/reservations/${reservation_id}/seat`} className="btn btn-primary">{status === "booked" ? "SEAT" : null}</a> */}
+            {/* <a href={`/reservations/${reservation_id}/edit`} className="btn btn-primary">EDIT</a> */}
+             <Link to={`/reservations/${reservation_id}/edit`} className="btn btn-primary">
+                 EDIT
+             </Link>
             <button
               type="button"
               data-reservation-id-cancel={reservation_id}
@@ -146,7 +145,7 @@ function Dashboard({ date }) {
         </button>
       </div>
       <ErrorAlert error={error} date={newDate} />
-      <table class="table">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">Res_ID</th>

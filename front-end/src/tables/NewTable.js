@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import createTable from "../utils/api";
+import { createTable } from "../utils/api";
 
 //render form to create a new table
-function NewTable({ reservation_date, reservation_id, partySize }) {
+function NewTable() {
   const history = useHistory();
   const [error, setError] = useState(null);
   const [newTable, setNewTable] = useState({

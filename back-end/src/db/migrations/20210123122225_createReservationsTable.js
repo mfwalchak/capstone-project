@@ -11,11 +11,11 @@ exports.up = function (knex) {
       table.time("reservation_time").notNullable();
       table.smallint("people").notNullable();
       table.increments("reservation_id").primary();
-      table.varchar("status")
+      table.varchar("status").defaultTo("booked");
 
   });
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists("reservations");
+  return knex.schema.dropTable("reservations");
 };

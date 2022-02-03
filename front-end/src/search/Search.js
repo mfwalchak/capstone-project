@@ -8,6 +8,7 @@ export default function Search() {
 
   //API GET call passes in mobile number paramaters
   function loadSearchResults() {
+    console.log("LOAD SEARCH:", query)
     const abortController = new AbortController();
     setError(null);
     findReservation({ mobile_number: query }, abortController.signal)
@@ -45,8 +46,8 @@ export default function Search() {
           </tr>
         );
       });
-    }
-    return <p>No reservations found</p>;
+    } else {
+      return <p>No reservations found</p>;}
   }
 
   return (

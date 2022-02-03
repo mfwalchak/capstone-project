@@ -103,10 +103,12 @@ function isTableBigEnough(req, res, next) {
 //validates if table is occupied before seating
 function isTableOccupied(req, res, next) {
   const { table } = res.locals;
+  const { reservation } = res.locals;
+
   try {
-    if (table.reservation_id) {
+    if (table.reservation_id || reservation.status === "seated") {
       const error = new Error("table is occupied!");
-      error.message = `occupied`;
+      error.message = `table is occupied or reservation is seated`;
       error.status = 400;
       throw error;
     }

@@ -12,7 +12,8 @@ export default function EditReservation() {
   const [reservationForm, setReservationForm] = useState({});
   const { reservation_id } = useParams();
   const history = useHistory();
-
+  //console.log("RESERVATION FORM:", reservationForm);
+  //console.log("RESERVATION ID FROM PARAMS:", reservation_id);
   //change handlers for reservation form
   function handleChange(evt) {
     const value = evt.target.value;
@@ -54,7 +55,8 @@ export default function EditReservation() {
     const abortController = new AbortController();
     setError(null);
     if (reservation_id) {
-      findReservation(reservation_id, abortController.signal)
+      //console.log("EDITRESERVATION.JS FIND RESERVATION ID:", reservation_id);
+      findReservation({ reservation_id }, abortController.signal)
         .then(setReservationForm)
         .catch(setError);
       return () => abortController.abort();
