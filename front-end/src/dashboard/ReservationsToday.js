@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import CancelButton from "./CancelButton";
 
 export default function ReservationsToday({reservations, formatPhoneNumber, handleReservationCancellation}) {
 
@@ -28,18 +29,11 @@ export default function ReservationsToday({reservations, formatPhoneNumber, hand
             <td>{people}</td>
             <td>{formatPhoneNumber(mobile_number)}</td>
             <td data-reservation-id-status={reservation_id}>{status}</td>
-            {status === "booked" ? <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary">SEAT</Link> : null}
-             <Link to={`/reservations/${reservation_id}/edit`} className="btn btn-primary">
+            <td>{status === "booked" ? <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary">SEAT</Link> : null}</td>
+            <td><Link to={`/reservations/${reservation_id}/edit`} className="btn btn-primary">
                  EDIT
-             </Link>
-            <button
-              type="button"
-              data-reservation-id-cancel={reservation_id}
-              className="btn btn-danger"
-              onClick={() => handleReservationCancellation(reservation_id)}
-            >
-              CANCEL
-            </button>
+             </Link></td>
+             <td><CancelButton reservation_id={reservation_id} handleReservationCancellation={handleReservationCancellation} /></td>
           </tr>
         );
       }

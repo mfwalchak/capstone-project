@@ -7,13 +7,20 @@ import {
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+const INITIAL_FORM_STATE = {
+  first_name: "",
+  last_name: "",
+  mobile_number: "",
+  reservation_date: "",
+  reservation_time: "",
+  people: "",
+}
+
 export default function ReservationForm() {
   const [error, setError] = useState(null);
-  const [reservationForm, setReservationForm] = useState({});
+  const [reservationForm, setReservationForm] = useState(INITIAL_FORM_STATE);
   const { reservation_id } = useParams();
   const history = useHistory();
-  //console.log("RESERVATION FORM:", reservationForm);
-  //console.log("RESERVATION ID FROM PARAMS:", reservation_id);
   //change handlers for reservation form
   function handleChange(evt) {
     const value = evt.target.value;
@@ -55,7 +62,6 @@ export default function ReservationForm() {
     const abortController = new AbortController();
     setError(null);
     if (reservation_id) {
-      //console.log("EDITRESERVATION.JS FIND RESERVATION ID:", reservation_id);
       findReservation({ reservation_id }, abortController.signal)
         .then(setReservationForm)
         .catch(setError);
@@ -87,7 +93,7 @@ export default function ReservationForm() {
         <label>
           Mobile Number:
           <input
-            type="text"
+            type="tel"
             name="mobile_number"
             value={reservationForm.mobile_number}
             onChange={handleChange}

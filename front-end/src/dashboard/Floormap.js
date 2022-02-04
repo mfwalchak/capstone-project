@@ -17,8 +17,7 @@ function FloorMap({ setResoStatus }) {
 
   return tables.map((table) => {
     return (
-      <>
-        <li key={table.table_id}>
+        <li className="list-group-item bg-dark text-white" key={table.table_id}>
           {`${table.table_name} seats ${table.capacity}`}
           <p data-table-id-status={`${table.table_id}`}>
             {!table.reservation_id ? "Free" : "Occupied"}
@@ -30,8 +29,6 @@ function FloorMap({ setResoStatus }) {
             />
           </p>
         </li>
-        <ErrorAlert error={error} />
-      </>
     );
   });
 }

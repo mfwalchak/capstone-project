@@ -33,21 +33,22 @@ export default function Search() {
           status,
         } = reservation;
         return (
-          <tr>
-            <th scope="row">{count++}</th>
-            <td>
-              {last_name}, {first_name}
-            </td>
-            <td>{reservation_date}</td>
-            <td>{reservation_time}</td>
-            <td>{people}</td>
-            <td>{mobile_number}</td>
-            <td data-reservation-id-status={reservation_id}>{status}</td>
-          </tr>
+            <tr key={reservation_id}>
+              <th scope="row">{count++}</th>
+              <td>
+                {last_name}, {first_name}
+              </td>
+              <td>{reservation_date}</td>
+              <td>{reservation_time}</td>
+              <td>{people}</td>
+              <td>{mobile_number}</td>
+              <td data-reservation-id-status={reservation_id}>{status}</td>
+            </tr>
         );
       });
     } else {
-      return <p>No reservations found</p>;}
+      return <tr key="not_found"><th>"No reservations found"</th></tr>;
+    }
   }
 
   return (
@@ -63,10 +64,25 @@ export default function Search() {
         </button>
       </div>
       <div>
+        <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">name</th>
+            <th scope="col">date</th>
+            <th scope="col">time</th>
+            <th scope="col">party size</th>
+            <th scope="col">mobile</th>
+            <th scope="col">status</th>
+          </tr>
+        </thead>
+        <tbody>
         <DisplayMatchingReservations />
+        </tbody>
+        </table>
       </div>
       <div>
-      <ErrorAlert error={error} />
+        <ErrorAlert error={error} />
       </div>
     </>
   );

@@ -112,7 +112,7 @@ function Dashboard({ date }) {
         </tbody>
       </table>
       <div>
-        <ul>
+        <ul className="list-group">
         <FloorMap setResoStatus={setResoStatus} />
         </ul>
       </div>

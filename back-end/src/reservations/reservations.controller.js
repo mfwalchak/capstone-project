@@ -217,9 +217,7 @@ async function updateReservationStatus(req, res, next) {
 async function updateReservation(req, res, next) {
   const { reservation_id } = res.locals.reservation;
   const updatedReso = { ...req.body.data, reservation_id };
-  //console.log("RESERVATION CONTROLLER UPDATE REQUEST BODY:", req.body.data);
   const data = await reservationsService.updateReso(updatedReso);
-  //console.log("RESERVATION CONTROLLER UPDATE RESO RESPONSE DATA:", data);
   res.status(200).json({ data });
 }
 //delete reservation

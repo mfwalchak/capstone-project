@@ -28,12 +28,12 @@ export default function FinishTableButton({
   //if table is seated with a valid reservation_id render the button
   if (reservation_id) {
     return (
-      <div>
-      <button type="" data-table-id-finish={table_id} onClick={handleClick}>
+      <>
+      <button type="button" className="btn btn-warning" data-table-id-finish={table_id} onClick={handleClick}>
         Finish
       </button>
       <ErrorAlert error={error} />
-      </div>
+      </>
     );
   }
   return null;

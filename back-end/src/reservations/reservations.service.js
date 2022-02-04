@@ -21,7 +21,6 @@ function listByResoDate(reservation_date, reservation_time) {
 }
 
 function create(newReso) {
-  console.log({ newReso });
   return knex("reservations")
     .insert(newReso)
     .returning("*")
@@ -29,7 +28,6 @@ function create(newReso) {
 }
 
 function search(mobile_number) {
-  //console.log("KNEX SEARCH MOBILE NUMBER:", mobile_number);
   return knex("reservations")
     .whereRaw(
       "translate(mobile_number, '() -', '') like ?",
@@ -39,7 +37,6 @@ function search(mobile_number) {
 }
 
 function updateResoStatus(reservation_id, status) {
-  console.log("knexUpdateResoStatus:", status);
   return knex("reservations")
     .where({ reservation_id })
     .update({ status })
