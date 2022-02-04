@@ -112,7 +112,7 @@ function Dashboard({ date }) {
         </tbody>
       </table>
       <div>
-        <ul className="list-group">
+        <ul className="list-group list-group-horizontal">
         <FloorMap setResoStatus={setResoStatus} />
         </ul>
       </div>
