@@ -7,7 +7,7 @@ import {
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-export default function EditReservation() {
+export default function ReservationForm() {
   const [error, setError] = useState(null);
   const [reservationForm, setReservationForm] = useState({});
   const { reservation_id } = useParams();

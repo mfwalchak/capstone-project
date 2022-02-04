@@ -89,7 +89,7 @@ function Dashboard({ date }) {
       } = reservation;
       if (status !== "finished") {
         return (
-          <tr>
+          <tr key="reservation_id">
             <th scope="row">{count++}</th>
             <td>
               {last_name}, {first_name}
@@ -100,15 +100,6 @@ function Dashboard({ date }) {
             <td>{formatPhoneNumber(mobile_number)}</td>
             <td data-reservation-id-status={reservation_id}>{status}</td>
             {status === "booked" ? <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary">SEAT</Link> : null}
-            {/* <Link to={`/reservations/${reservation_id}/seat`}>
-              {status === "booked" ? (
-                <button type="button" className="btn btn-primary">
-                  SEAT
-                </button>
-              ) : null}
-            </Link> */}
-            {/* <a href={`/reservations/${reservation_id}/seat`} className="btn btn-primary">{status === "booked" ? "SEAT" : null}</a> */}
-            {/* <a href={`/reservations/${reservation_id}/edit`} className="btn btn-primary">EDIT</a> */}
              <Link to={`/reservations/${reservation_id}/edit`} className="btn btn-primary">
                  EDIT
              </Link>
