@@ -1,6 +1,7 @@
 import { listTables } from "../utils/api";
 import React, { useState, useEffect } from "react";
 import FinishTableButton from "./FinishTableButton";
+import ErrorAlert from "../layout/ErrorAlert";
 
 //renders current tables in the restaurant
 function FloorMap({ setResoStatus }) {
@@ -14,10 +15,10 @@ function FloorMap({ setResoStatus }) {
     listTables(abortController.signal).then(setTables).catch(setError);
   }, [clearedState]);
 
-  return tables.map((table, index) => {
+  return tables.map((table) => {
     return (
-      <ul>
-        <li key={index}>
+      <>
+        <li key={table.table_id}>
           {`${table.table_name} seats ${table.capacity}`}
           <p data-table-id-status={`${table.table_id}`}>
             {!table.reservation_id ? "Free" : "Occupied"}
@@ -29,7 +30,8 @@ function FloorMap({ setResoStatus }) {
             />
           </p>
         </li>
-      </ul>
+        <ErrorAlert error={error} />
+      </>
     );
   });
 }

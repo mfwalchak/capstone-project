@@ -32,7 +32,6 @@ headers.append("Content-Type", "application/json");
 async function fetchJson(url, options, onCancel) {
   try {
     const response = await fetch(url, options);
-    //console.log("API FETCH RESPONSE:", response);
     if (response.status === 204) {
       return null;
     }
@@ -69,8 +68,6 @@ export async function listReservations(params, signal) {
 }
 
 export async function findReservation(params, signal) {
-  console.log("API FIND RESERVATION PARAMS:", params)
-  //const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${params}`);
   const url = new URL(`${API_BASE_URL}/reservations?${params}`);
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
@@ -81,7 +78,7 @@ export async function findReservation(params, signal) {
 }
 
 export async function createReservation(params, signal) {
-  const url = `${API_BASE_URL}/reservations`; //this file path might potentially cause backend tests to fail check /reservations
+  const url = `${API_BASE_URL}/reservations`;
   const options = {
     method: "POST",
     headers,

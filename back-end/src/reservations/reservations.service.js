@@ -12,7 +12,6 @@ function list() {
 }
 
 function listByResoDate(reservation_date, reservation_time) {
-  //console.log("SERVICE:", reservation_date)
   return knex("reservations")
   .select("*")
   .whereNot({ status: 'finished' }) //added 2.2 for test 6 validation
@@ -20,14 +19,6 @@ function listByResoDate(reservation_date, reservation_time) {
   .where({ reservation_date: reservation_date })
   .orderBy("reservation_time");
 }
-
-// function listByResoId(reservation_id) {
-//   //console.log("SERVICE:", reservation_date)
-//   return knex("reservations")
-//   .select("*")
-//   .where({ reservation_date: reservation_date })
-//   .orderBy("reservation_time");
-// }
 
 function create(newReso) {
   console.log({ newReso });

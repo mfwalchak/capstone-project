@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { clearTable } from "../utils/api";
-
+import ErrorAlert from "../layout/ErrorAlert";
 //component renders "finish" button upon table being seated, with functionaltiy to clear the table
 export default function FinishTableButton({
   table_id,
@@ -28,9 +28,12 @@ export default function FinishTableButton({
   //if table is seated with a valid reservation_id render the button
   if (reservation_id) {
     return (
+      <div>
       <button type="" data-table-id-finish={table_id} onClick={handleClick}>
         Finish
       </button>
+      <ErrorAlert error={error} />
+      </div>
     );
   }
   return null;

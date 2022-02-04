@@ -185,18 +185,15 @@ async function list(req, res) {
   const reservation_id = req.query.reservation_id;
   let data;
   if (mobile_number) {
-      //console.log("CONTROLLER IF MOBILE IS TRUE:", mobile_number);
     data = await reservationsService.search(req.query.mobile_number);
     res.status(200).json({ data });
   } else if (date) {
-      //console.log("CONTROLLER IF DATE IS TRUE", date)
     data = await reservationsService.listByResoDate(req.query.date);
     res.status(200).json({ data });
   } else if (reservation_id){
     data = await reservationsService.read(req.query.reservation_id);
     res.status(200).json({ data });
   } else {
-      //console.log("CONTROLLER IF LIST ALL", req.query);
     data = await reservationsService.list();
     res.status(200).json({ data });
   }
@@ -220,7 +217,9 @@ async function updateReservationStatus(req, res, next) {
 async function updateReservation(req, res, next) {
   const { reservation_id } = res.locals.reservation;
   const updatedReso = { ...req.body.data, reservation_id };
+  //console.log("RESERVATION CONTROLLER UPDATE REQUEST BODY:", req.body.data);
   const data = await reservationsService.updateReso(updatedReso);
+  //console.log("RESERVATION CONTROLLER UPDATE RESO RESPONSE DATA:", data);
   res.status(200).json({ data });
 }
 //delete reservation

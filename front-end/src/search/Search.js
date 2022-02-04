@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { findReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 export default function Search() {
   const [query, setQuery] = useState("");
@@ -8,7 +9,6 @@ export default function Search() {
 
   //API GET call passes in mobile number paramaters
   function loadSearchResults() {
-    console.log("LOAD SEARCH:", query)
     const abortController = new AbortController();
     setError(null);
     findReservation({ mobile_number: query }, abortController.signal)
@@ -64,6 +64,9 @@ export default function Search() {
       </div>
       <div>
         <DisplayMatchingReservations />
+      </div>
+      <div>
+      <ErrorAlert error={error} />
       </div>
     </>
   );
