@@ -95,12 +95,13 @@ function Dashboard({ date }) {
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">Res_ID</th>
+            <th scope="col"> </th>
             <th scope="col">Name</th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
             <th scope="col">Party Size</th>
             <th scope="col">Mobile</th>
+            <th scope="col">ID</th>
             <th scope="col">Status</th>
           </tr>
         </thead>

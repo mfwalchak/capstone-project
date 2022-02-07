@@ -28,6 +28,7 @@ export default function ReservationsToday({reservations, formatPhoneNumber, hand
             <td>{reservation_time}</td>
             <td>{people}</td>
             <td>{formatPhoneNumber(mobile_number)}</td>
+            <td>{reservation_id}</td>
             <td data-reservation-id-status={reservation_id}>{status}</td>
             <td>{status === "booked" ? <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary">SEAT</Link> : null}</td>
             <td><Link to={`/reservations/${reservation_id}/edit`} className="btn btn-primary">
