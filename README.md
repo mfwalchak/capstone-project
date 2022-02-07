@@ -13,9 +13,10 @@ Periodic Tables will allow you to seat that reservation upon arrival, notifying 
 When your guest is finished the table can be cleared and set again for the next reservation. 
 Existing reservations can be found using SEARCH by the mobile phone number used to make the reservation, and easily updated using the EDIT button or cancelled with the CANCEL button.  
 
-![dashboard](https://user-images.githubusercontent.com/81874273/152538181-2c5396ec-e63b-4ed4-8ac2-84720655d5ed.JPG)
-![finishtable](https://user-images.githubusercontent.com/81874273/152538193-81c14958-92b6-41fd-a211-aab4cb53a3a4.JPG)
-![phone search](https://user-images.githubusercontent.com/81874273/152538202-841a145d-a9d6-4e7f-bcc1-5e5227c94553.JPG)
+![Screenshot (52)](https://user-images.githubusercontent.com/81874273/152592349-b59da428-31d1-43f3-8127-3202f050fab8.png)
+![Screenshot (53)](https://user-images.githubusercontent.com/81874273/152592365-2bc39534-3a1f-4d0c-a25a-46cff3de79e3.png)
+![Screenshot (54)](https://user-images.githubusercontent.com/81874273/152592423-ec7cb1b8-63ab-421f-a558-34afd3c081ab.png)
+
 
 # API DOCUMENTATION
 RESERVATIONS  
