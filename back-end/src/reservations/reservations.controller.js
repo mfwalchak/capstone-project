@@ -44,7 +44,7 @@ function isNotATuesday(req, res, next) {
     next(error);
   }
 }
-/* ******BUG FIX NEEDED: This works locally. Deployed version throws error for reservations made on the same day******** */
+/* ******BUG FIX NEEDED: This works locally. Deployed version is in UTC reservations must be made 7 hours ahead of MST******** */
 function reservationNotInPast(req, res, next) {
   let { data = {} } = req.body;
   let date = data.reservation_date;
