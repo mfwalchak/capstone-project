@@ -1,7 +1,6 @@
 import { listTables } from "../utils/api";
 import React, { useState, useEffect } from "react";
 import FinishTableButton from "./FinishTableButton";
-import ErrorAlert from "../layout/ErrorAlert";
 
 //renders current tables in the restaurant
 function FloorMap({ setResoStatus }) {
