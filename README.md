@@ -1,7 +1,9 @@
 # PERIODIC TABLES - A RESTAURANT RESERVATION SYSTEM
 ## Thinkful Final Capstone Project
-check it out here!
+check it out here! (but please allow up to a minute for the page to load, this is a free deployment on Heroku :)
+
 [https://mfwalchak-capstone-client.herokuapp.com/dashboard](https://mfwalchak-capstone-client.herokuapp.com/dashboard)
+
 
 A full-stack app using React.js, CSS, Node.js, Express and PostreSQL.
 
